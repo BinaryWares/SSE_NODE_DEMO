@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSE - Demo</title>
+    <style>
+      body {
+        background: #ccc;
+      }
+      main {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+      }
+      section {
+        width: 250px;
+        padding: 8px;
+        text-align: center;
+        background: #fefefe;
+        border-radius: 9px;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      h1 {
+        font-family: "Courier New", Courier, monospace;
+        margin-bottom: 12px;
+      }
+      em {
+        display: block;
+        margin-bottom: 18px;
+        background: #363636;
+        border: 1px solid #000;
+        padding: 4px;
+        border-radius: 8px;
+        color: greenyellow;
+        font-family: monospace;
+        font-size: 16px;;
+      }
+      button {
+        background: #25a5e0;
+        color: #fff;
+        padding: 8px 16px;
+        border: #1e9ed9;
+        border-radius: 9px;
+        cursor: pointer;
+      }
+      button:active{
+        transform: scale(0.95);
+      } 
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>Ticker</h1>
+        <em id="data">Connecting....</em>
+        <button onclick="closeStream()">Close Stream</button>
+      </section>
+    </main>
+    <script>
+      const sseSource = new EventSource("http://127.0.0.1:8080/ticker");
+      sseSource.onmessage = function (event) {
+        const dataElement = document.getElementById("data");
+        const { ticker } = JSON.parse(event.data);
+        dataElement.textContent = ticker;
+      };
+      const closeStream = () => sseSource.close();
+    </script>
+  </body>
+</html>
